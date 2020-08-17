@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/menu_btn"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/icons8_menu_52px"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="36dp"
+        android:layout_height="36dp"/>
+
+    <Button
+        android:id="@+id/cart_btn"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/icons8_shopping_cart_64px"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/cart_btn"
+        android:layout_marginTop="100dp"
+        android:id="@+id/rvNamerest"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+</RelativeLayout>

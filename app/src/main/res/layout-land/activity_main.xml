@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/menu_btn"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/icons8_menu_52px"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
+    <Button
+        android:id="@+id/cart_btn"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/icons8_shopping_cart_64px"
+        android:layout_width="56dp"
+        android:layout_height="56dp"/>
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="0.0"
+        android:drawableLeft="@drawable/icons8_thai_baht_64px"
+        android:textSize="@dimen/txt_size_rvitem_name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/cart_btn"
+        android:layout_marginTop="80dp"
+        android:id="@+id/rvNamerest"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
