@@ -8,19 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantpos.R
 
-
-class RestuarantNameAdapter(
+class MenuAdapter(
     context: Context,
-    mNameList: List<RestNameItem>?
+    mNameList: List<FoodnameItem>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mNameList: List<RestNameItem>? = mNameList
+    private var mNameList: List<FoodnameItem>? = mNameList
     private var mContext: Context? = context
-    var layoutInflater = LayoutInflater.from(mContext)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.rvrestname_item, parent, false)
-        return ItemViewHolder(view)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.rvmenu_item, parent, false)
+        return MenuAdapter.ItemViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -38,16 +36,14 @@ class RestuarantNameAdapter(
         var textName: TextView
 
         init {
-            textName = itemView.findViewById(R.id.restaurantname_tv)
+            textName = itemView.findViewById(R.id.txt_menuname)
         }
     }
 
     private fun ItemRows(holder: ItemViewHolder, position: Int) {
-        val currentItem: RestNameItem = this.mNameList!![position]
-
-        holder.textName.text = currentItem.getRestaurantName()
+        val currentItem: FoodnameItem = this.mNameList!![position]
+        holder.textName.text = currentItem.getFoodname()
 
 
     }
-
 }

@@ -1,15 +1,17 @@
 package com.example.restaurantpos.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.restaurantpos.EditRestActivity
 import com.example.restaurantpos.R
 
-
-class RestuarantNameAdapter(
+class EditRestnameAdapter(
     context: Context,
     mNameList: List<RestNameItem>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -19,7 +21,8 @@ class RestuarantNameAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.rvrestname_item, parent, false)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.rveditrestname_item, parent, false)
         return ItemViewHolder(view)
     }
 
@@ -36,9 +39,11 @@ class RestuarantNameAdapter(
     private class ItemViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         var textName: TextView
+        var editbtn: Button
 
         init {
             textName = itemView.findViewById(R.id.restaurantname_tv)
+            editbtn = itemView.findViewById(R.id.edit_btn)
         }
     }
 
@@ -46,6 +51,11 @@ class RestuarantNameAdapter(
         val currentItem: RestNameItem = this.mNameList!![position]
 
         holder.textName.text = currentItem.getRestaurantName()
+
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            mContext?.startActivity(Intent(mContext, EditRestActivity::class.java)
+                .putExtra(mContext!!.resources.getString(R.string.headeredit),currentItem.getRestaurantName()))
+        })
 
 
     }

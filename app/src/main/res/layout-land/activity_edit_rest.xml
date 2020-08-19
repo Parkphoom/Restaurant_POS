@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".EditRestActivity">
+
+    <TextView
+        android:id="@+id/headeredit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/txt_size_rvitem_name" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editRestname_text_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headeredit"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:hint="@string/RestaurantName"
+        android:textColorHint="@color/black"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editRestname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:textSize="28sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_layout"
+        android:layout_below="@+id/editRestname_text_layout"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/red_btn"
+            android:paddingStart="50dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="50dp"
+            android:paddingBottom="10dp"
+            android:text="@string/Delete"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_rvitem_name" />
+
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/green_btn"
+            android:paddingStart="50dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="50dp"
+            android:paddingBottom="10dp"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_rvitem_name" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

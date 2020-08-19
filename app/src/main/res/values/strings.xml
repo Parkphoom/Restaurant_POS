@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Restaurant POS</string>
+    <string name="Add">เพิ่ม</string>
+    <string name="main_title">รายได้</string>
+    <string name="addrestaurant">เพิ่มร้านค้า</string>
+    <string name="export">Export</string>
+    <string name="restmanage">จัดการร้านอาหาร</string>
+    <string name="RestaurantName">ชื่อร้าน</string>
+    <string name="headeredit">textheader_editactivity</string>
+    <string name="Delete">ลบ</string>
+    <string name="save">บันทึก</string>
 </resources>

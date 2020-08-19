@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addmenu"
+        android:icon="@drawable/icons8_add_new_64px"
+        android:title="@string/addrestaurant"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/exportmenu"
+        android:icon="@drawable/icons8_export_48px_1"
+        android:title="@string/export"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

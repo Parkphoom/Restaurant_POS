@@ -8,21 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantpos.R
 
-
-class RestuarantNameAdapter(
+class FoodNameAdapter(
     context: Context,
-    mNameList: List<RestNameItem>?
+    mNameList: List<FoodnameItem>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mNameList: List<RestNameItem>? = mNameList
+    private var mNameList: List<FoodnameItem>? = mNameList
     private var mContext: Context? = context
-    var layoutInflater = LayoutInflater.from(mContext)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.rvrestname_item, parent, false)
-        return ItemViewHolder(view)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.rvfoodname_item, parent, false)
+        return FoodNameAdapter.ItemViewHolder(view)
     }
-
     override fun getItemCount(): Int {
         return mNameList?.size!!
     }
@@ -35,19 +31,18 @@ class RestuarantNameAdapter(
 
     private class ItemViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        var textName: TextView
-
-        init {
-            textName = itemView.findViewById(R.id.restaurantname_tv)
-        }
+//        var textName: TextView
+//
+//        init {
+//            textName = itemView.findViewById(R.id.restaurantname_tv)
+//        }
     }
 
     private fun ItemRows(holder: ItemViewHolder, position: Int) {
-        val currentItem: RestNameItem = this.mNameList!![position]
-
-        holder.textName.text = currentItem.getRestaurantName()
+//        val currentItem: RestNameItem = this.mNameList!![position]
+//
+//        holder.textName.text = currentItem.getQueue()
 
 
     }
-
 }
