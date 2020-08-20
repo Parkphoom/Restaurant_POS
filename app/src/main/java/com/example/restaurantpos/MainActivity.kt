@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,17 +15,20 @@ import com.example.restaurantpos.Adapter.FoodNameAdapter
 import com.example.restaurantpos.Adapter.FoodnameItem
 import com.example.restaurantpos.Adapter.RestNameItem
 import com.example.restaurantpos.Adapter.RestuarantNameAdapter
-import com.example.restaurantpos.DB.DBManager
+import com.example.restaurantpos.DB.DBMenuManager
+import com.example.restaurantpos.DB.DBRestaurantManager
+import com.example.restaurantpos.DB.DatabaseHelper
+import com.example.restaurantpos.DB.OnclickItem
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Method
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
 
-    private var dbManager: DBManager? = null
-
+    private var dbRestaurantManager: DBRestaurantManager? = null
+    private var dbMenuManager: DBMenuManager? = null
     private lateinit var restuarantNameAdapter: RestuarantNameAdapter
     var rvRestName: RecyclerView? = null
     private var restnameList: List<RestNameItem>? = null
@@ -41,13 +45,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         initView()
 
 
-        setUpRecyclerViewFoodname()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        loadRestautantTask().execute()
     }
 
     private fun initView() {
-        dbManager = DBManager(this)
-        loadRestautantTask().execute()
+        dbRestaurantManager = DBRestaurantManager(this)
+        dbMenuManager = DBMenuManager(this)
+
 
         menu_btn = findViewById(R.id.menu_btn)
         menu_btn!!.setOnClickListener(this)
@@ -107,26 +115,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             rvRestName!!.setHasFixedSize(true)
             rvRestName!!.setLayoutManager(layoutManager)
-            restuarantNameAdapter = RestuarantNameAdapter(this, arrayList)
+            restuarantNameAdapter = RestuarantNameAdapter(this, arrayList, object : OnclickItem {
+                override fun onItemClick(restaurantId: Int?) {
+                    super.onItemClick(restaurantId)
+                    Log.d("onItemClick", "onItemClick: ")
+                    if (restaurantId != null) {
+                        Log.d("onItemClick", "$restaurantId")
+                        loadMenuTask(restaurantId).execute()
+                    }
+                }
+            })
             rvRestName!!.setAdapter(restuarantNameAdapter)
         })
     }
 
-    private fun setUpRecyclerViewFoodname() {
+    private fun setUpRecyclerViewFoodname(arrayList: ArrayList<FoodnameItem>) {
         runOnUiThread(Runnable {
             rvFoodName = findViewById<RecyclerView>(R.id.rvFoodmenu)
-
-            foodnameList = ArrayList<FoodnameItem>()
-            (foodnameList as ArrayList<FoodnameItem>).add(FoodnameItem("asdhnnasdm"))
-            (foodnameList as ArrayList<FoodnameItem>).add(FoodnameItem("asdhnnasdm"))
-            (foodnameList as ArrayList<FoodnameItem>).add(FoodnameItem("asdhnnasdm"))
-
 
             val layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvFoodName!!.setHasFixedSize(true)
             rvFoodName!!.setLayoutManager(layoutManager)
-            foodNameAdapter = FoodNameAdapter(this, foodnameList)
+            foodNameAdapter = FoodNameAdapter(this, arrayList)
             rvFoodName!!.setAdapter(foodNameAdapter)
         })
     }
@@ -143,9 +154,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         override fun onPreExecute() {
             super.onPreExecute()
-            dbManager!!.open()
+            dbRestaurantManager!!.open()
 
-            dataDB = dbManager!!.getDataRESTAURANT()!!
+            dataDB = dbRestaurantManager!!.getDataRESTAURANT()!!
             restnameList = ArrayList<RestNameItem>()
         }
 
@@ -155,12 +166,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 var values: JSONObject? = JSONObject()
                 values = dataDB[i] as JSONObject?
                 try {
-                    val RestaurantName = values!!.getString("restaurantName")
-                    val RestaurantDate = values!!.getString("restaurantDate")
-                    Log.d("dataDB","$RestaurantName $RestaurantDate")
-                    (restnameList as ArrayList<RestNameItem>).add(RestNameItem(RestaurantName))
-                }
-                catch (e : JSONException) {
+                    val Restaurant_ID = values!!.getInt(DatabaseHelper.RESTAURANT_ID)
+                    val RestaurantName = values!!.getString(DatabaseHelper.RESTAURANT_NAME)
+                    val RestaurantDate = values!!.getString(DatabaseHelper.RESTAURANT_DATE)
+                    Log.d("dataDB", "$RestaurantName $RestaurantDate")
+                    (restnameList as ArrayList<RestNameItem>).add(
+                        RestNameItem(
+                            Restaurant_ID,
+                            RestaurantName
+                        )
+                    )
+                } catch (e: JSONException) {
                     e.printStackTrace();
                     Log.d("dataDB", e.toString())
                 }
@@ -171,8 +187,54 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         override fun onPostExecute(result: Void?) {
             super.onPostExecute(result)
-            dbManager?.close()
+            dbRestaurantManager?.close()
             setUpRecyclerViewRestname(restnameList as ArrayList<RestNameItem>)
+        }
+
+    }
+
+
+    inner class loadMenuTask(rest_id: Int) : AsyncTask<Void, Void, Void>() {
+        val rest_id = rest_id
+        override fun onPreExecute() {
+            super.onPreExecute()
+            dbMenuManager!!.open()
+
+            dataDB = dbMenuManager!!.getDataMENU()!!
+            foodnameList = ArrayList<FoodnameItem>()
+        }
+
+        override fun doInBackground(vararg params: Void?): Void? {
+            for (i in 0 until dataDB.size) {
+                Log.d("dataDB", dataDB[i].toString())
+                var values: JSONObject? = JSONObject()
+                values = dataDB[i] as JSONObject?
+                try {
+                    val Restaurant_ID = values!!.getInt(DatabaseHelper.RESTAURANT_ID)
+                    val MenuName = values!!.getString(DatabaseHelper.MENU_NAME)
+                    val MenuDate = values!!.getString(DatabaseHelper.MENU_DATE)
+                    Log.d("dataDB", "$MenuName $Restaurant_ID")
+                    if (rest_id == Restaurant_ID) {
+                        (foodnameList as ArrayList<FoodnameItem>).add(
+                            FoodnameItem(
+                                MenuName
+                            )
+                        )
+                    }
+
+                } catch (e: JSONException) {
+                    e.printStackTrace();
+                    Log.d("dataDB", e.toString())
+                }
+            }
+
+            return null
+        }
+
+        override fun onPostExecute(result: Void?) {
+            super.onPostExecute(result)
+            dbMenuManager?.close()
+            setUpRecyclerViewFoodname(foodnameList as ArrayList<FoodnameItem>)
         }
 
     }

@@ -9,4 +9,10 @@
     <string name="headeredit">textheader_editactivity</string>
     <string name="Delete">ลบ</string>
     <string name="save">บันทึก</string>
+    <string name="SaveSuccess">บันทึกสำเร็จ</string>
+    <string name="SaveFailed">บันทึกไม่สำเร็จ</string>
+    <string name="DeleteSuccess">ลบสำเร็จ</string>
+    <string name="DeleteFailed">ลบไม่สำเร็จ</string>
+    <string name="NameMatch_Error">ไม่สามารถใช้ชื่อนี้ได้ ชื่อนี้ถูกใช้แล้ว</string>
+    <string name="rest_id">Restaurant_Id</string>
 </resources>

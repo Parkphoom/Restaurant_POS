@@ -3,23 +3,20 @@ package com.example.restaurantpos.DB
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.DatabaseUtils.InsertHelper
+import android.database.DatabaseUtils
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 
-/**
- * Created by anupamchugh on 19/10/15.
- */
-class DBManager(private val context: Context) {
+class DBMenuManager(private val context: Context) {
     private var dbHelper: DatabaseHelper? = null
     private var database: SQLiteDatabase? = null
 
     @Throws(SQLException::class)
-    fun open(): DBManager {
-        dbHelper = DatabaseHelper(context, DatabaseHelper.TABLE_RESTAURANT)
+    fun open(): DBMenuManager {
+        dbHelper = DatabaseHelper(context, DatabaseHelper.TABLE_MENU)
         database = dbHelper!!.writableDatabase
 //        getDBsize();
         return this
@@ -45,7 +42,7 @@ class DBManager(private val context: Context) {
     private val maxData: Int
         private get() {
             val countQuery =
-                "SELECT count(" + DatabaseHelper.RESTAURANT_ID + ") FROM " + DatabaseHelper.TABLE_RESTAURANT
+                "SELECT count(" + DatabaseHelper.MENU_ID + ") FROM " + DatabaseHelper.TABLE_MENU
 
 //        String selectQuery = "SELECT _ID FROM " + TABLE_NAME + " LIMIT " + limit + " OFFSET " + newoffset;
             database = dbHelper!!.readableDatabase
@@ -72,15 +69,16 @@ class DBManager(private val context: Context) {
             return maxdata
         }
 
-    fun getDataRESTAURANT(): MutableList<Any?>? {
+    fun getDataMENU(): MutableList<Any?>? {
         val selectQuery =
-            "SELECT " + DatabaseHelper.RESTAURANT_ID + "," + DatabaseHelper.RESTAURANT_NAME + "," + DatabaseHelper.RESTAURANT_DATE + " " +
-                    "FROM " + DatabaseHelper.TABLE_RESTAURANT
+            "SELECT " + DatabaseHelper.MENU_ID + "," + DatabaseHelper.RESTAURANT_ID + "," + DatabaseHelper.MENU_NAME +
+                    "," + DatabaseHelper.MENU_PRICE + "," + DatabaseHelper.MENU_DATE + " " +
+                    "FROM " + DatabaseHelper.TABLE_MENU
         database = dbHelper!!.readableDatabase
         val cursor = database!!.rawQuery(selectQuery, null)
         //        Cursor cursor = database.query(DATABASE_TABLE, rank, null, null, null, null, yourColumn+" DESC");
         val data: MutableList<Any?> = mutableListOf<Any?>()
-        Log.d("cursorr", "getDataRESTAURANT")
+        Log.d("cursorr", "getDataMENU")
         Log.d("cursorr", cursor.toString())
         database!!.beginTransaction()
         try {
@@ -111,60 +109,87 @@ class DBManager(private val context: Context) {
         return data
     }
 
-    fun insertRESTAURANT(namerest: String?, date: String?) {
-        val ih = InsertHelper(database, DatabaseHelper.TABLE_RESTAURANT)
-        // Get the numeric indexes for each of the columns that we're updating
-        val NameRestaurant = ih.getColumnIndex(DatabaseHelper.RESTAURANT_NAME)
-        val Date = ih.getColumnIndex(DatabaseHelper.RESTAURANT_DATE)
-        try {
-            // Get the InsertHelper ready to insert a single row
-            ih.prepareForInsert()
+    //    fun insertMENU(rest_id: Int, namemenu: String?, price: Int, date: String?): Boolean {
+//        val ih = DatabaseUtils.InsertHelper(database, DatabaseHelper.TABLE_MENU)
+//        // Get the numeric indexes for each of the columns that we're updating
+//
+//        val NameMenu = ih.getColumnIndex(DatabaseHelper.MENU_NAME)
+//        val PriceMenu = ih.getColumnIndex(DatabaseHelper.MENU_PRICE)
+//        val Date = ih.getColumnIndex(DatabaseHelper.MENU_DATE)
+//        val Restaurant_ID = ih.getColumnIndex(DatabaseHelper.RESTAURANT_ID)
+//        try {
+//            // Get the InsertHelper ready to insert a single row
+//            ih.prepareForInsert()
+//
+//            // Add the data for each column
+//            ih.bind(NameMenu, namemenu)
+//            ih.bind(PriceMenu, price)
+//            ih.bind(Date, date)
+//            ih.bind(Restaurant_ID, rest_id)
+//
+//            // Insert the row into the database.
+//            ih.execute()
+//            Log.d("DBManager", "Success")
+//            return true
+//        } catch (e: Exception) {
+//            Log.d("DBManager", e.toString())
+//            return false
+//        } finally {
+//            ih.close() // See comment below from Stefan Anca
+//            Log.d("DBManager", "close")
+//        }
+//    }
+    fun insertMENU(rest_id: Int, namemenu: String, price: Int, date: String): Long? {
+        val cv = ContentValues()
+        cv.put(DatabaseHelper.RESTAURANT_ID, rest_id)
+        cv.put(DatabaseHelper.MENU_NAME, namemenu)
+        cv.put(DatabaseHelper.MENU_PRICE, price)
+        cv.put(DatabaseHelper.MENU_DATE, date)
 
-            // Add the data for each column
-            ih.bind(NameRestaurant, namerest)
-            ih.bind(Date, date)
-
-            // Insert the row into the database.
-            ih.execute()
-            Log.d("DBManager", "Success")
-        } catch (e: Exception) {
-            Log.d("DBManager", e.toString())
-        } finally {
-            ih.close() // See comment below from Stefan Anca
-            Log.d("DBManager", "close")
-        }
+        return database!!.insert(DatabaseHelper.TABLE_MENU, null, cv)
     }
 
-    fun fetchRESTAURANT(): Cursor? {
+    fun fetchMENU(): Cursor? {
         val columns = arrayOf(
+            DatabaseHelper.MENU_ID,
             DatabaseHelper.RESTAURANT_ID,
-            DatabaseHelper.RESTAURANT_NAME,
-            DatabaseHelper.RESTAURANT_DATE
+            DatabaseHelper.MENU_NAME,
+            DatabaseHelper.MENU_PRICE,
+            DatabaseHelper.MENU_DATE
         )
         val cursor =
-            database!!.query(DatabaseHelper.TABLE_RESTAURANT, columns, null, null, null, null, null)
+            database!!.query(DatabaseHelper.TABLE_MENU, columns, null, null, null, null, null)
         cursor?.moveToFirst()
         return cursor
     }
 
-    fun updateRESTAURANT(_id: Long, name: String?, income: Int?): Int {
+
+    fun updateMENU(oldQuantity: String?, newQuantity: String?): Boolean {
         val contentValues = ContentValues()
-        contentValues.put(DatabaseHelper.RESTAURANT_NAME, name)
-        contentValues.put(DatabaseHelper.RESTAURANT_DATE, income)
-        return database!!.update(
-            DatabaseHelper.TABLE_RESTAURANT,
-            contentValues,
-            DatabaseHelper.RESTAURANT_ID + " = " + _id,
-            null
-        )
+        val whereClause: String = DatabaseHelper.MENU_NAME + "= '" + oldQuantity + "'"
+
+
+        // if you want to update with respect of quantity too. try this where and whereArgs below
+
+        //final String whereClause = SQLiteCBLC.COL_ORDNAME + " =? AND " + SQLiteCBLC.COL_QUANTITY + " =?";
+        //final String[] whereArgs = {
+        //orderName, String.valueOf(oldQuantity)
+        //};
+        contentValues.put(DatabaseHelper.MENU_NAME, newQuantity)
+        return database?.update(
+            DatabaseHelper.TABLE_MENU, contentValues,
+            whereClause, null
+        )!! > 0
     }
 
-    fun deleteRESTAURANT(_id: Long) {
-        database!!.delete(
-            DatabaseHelper.TABLE_RESTAURANT,
-            DatabaseHelper.RESTAURANT_ID + "=" + _id,
-            null
-        )
+    fun deleteMENU(name: String) {
+        try {
+            database?.execSQL("DELETE FROM " + DatabaseHelper.TABLE_MENU + " WHERE " + DatabaseHelper.MENU_NAME + "= '" + name + "'");
+
+        } catch (e: Exception) {
+            Log.e(TAG, "deleteMENU: $e")
+        }
+
     }
 
     companion object {
