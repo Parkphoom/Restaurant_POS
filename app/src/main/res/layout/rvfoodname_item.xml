@@ -9,25 +9,19 @@
 
     <TextView
         android:id="@+id/foodname_tv"
-        android:text="asdasdad"
+        android:text=""
         android:layout_marginStart="10dp"
         android:textSize="@dimen/txt_size_rvitem_name"
         android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <TextView
-        android:id="@+id/fooddetails_tv"
-        android:layout_below="@+id/foodname_tv"
-        android:text="asdasdad"
-        android:layout_marginStart="30dp"
-        android:textSize="32dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
+        android:id="@+id/foodprice_tv"
         android:gravity="center"
         android:drawableStart="@drawable/icons8_thai_baht_64px"
-        android:layout_below="@+id/fooddetails_tv"
-        android:text="50"
+        android:layout_below="@+id/foodname_tv"
+        android:text=""
         android:layout_marginStart="20dp"
         android:textSize="32dp"
         android:layout_width="wrap_content"

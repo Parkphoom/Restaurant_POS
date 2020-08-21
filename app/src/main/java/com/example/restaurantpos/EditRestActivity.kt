@@ -1,12 +1,15 @@
 package com.example.restaurantpos
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.restaurantpos.Adapter.FoodnameItem
 import com.example.restaurantpos.Adapter.MenuAdapter
-import com.example.restaurantpos.Adapter.RestNameItem
 import com.example.restaurantpos.DB.DBMenuManager
 import com.example.restaurantpos.DB.DBRestaurantManager
 import com.example.restaurantpos.DB.DatabaseHelper
@@ -65,7 +67,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
         name = intent.getStringExtra(resources.getString(R.string.headeredit))
         rest_id = intent.getIntExtra(getString(R.string.rest_id), -1)
-        if(rest_id != -1){
+        if (rest_id != -1) {
             loadMenuTask().execute()
         }
         Log.d("rest_id", "initView:$rest_id ")
@@ -99,7 +101,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
     @SuppressLint("SimpleDateFormat")
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.save_btn -> {
                 if (restnameEdt!!.text.toString().isNullOrEmpty()) {
                     editRestnametextlayout?.error = "จำเป็นต้องกรอก"
@@ -331,12 +333,14 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     val Restaurant_ID = values!!.getInt(DatabaseHelper.RESTAURANT_ID)
                     val MenuName = values!!.getString(DatabaseHelper.MENU_NAME)
+                    val MenuPrice = values.getString(DatabaseHelper.MENU_PRICE)
                     val MenuDate = values!!.getString(DatabaseHelper.MENU_DATE)
                     Log.d("dataDB", "$MenuName $Restaurant_ID")
-                    if(rest_id == Restaurant_ID){
+                    if (rest_id == Restaurant_ID) {
                         (foodnameList as ArrayList<FoodnameItem>).add(
                             FoodnameItem(
-                                MenuName
+                                MenuName,
+                                MenuPrice
                             )
                         )
                     }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
@@ -18,7 +20,7 @@
             android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:padding="10dp"
-            android:text="165156"
+            android:text=""
             android:textAlignment="textStart"
             android:textSize="@dimen/txt_size_rvitem_name" />
 
@@ -27,11 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
             android:padding="10dp"
-            android:text="asdasdasqd"
-            android:textAlignment="textEnd"
-            android:textSize="@dimen/txt_size_rvitem_name" />
+            android:text=""
+            android:gravity="center"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/txt_size_rvitem_name"
+            tools:ignore="RtlCompat"
+            app:drawableLeftCompat="@drawable/icons8_thai_baht_64px" />
     </LinearLayout>
 
     <Button

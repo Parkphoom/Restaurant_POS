@@ -109,36 +109,7 @@ class DBMenuManager(private val context: Context) {
         return data
     }
 
-    //    fun insertMENU(rest_id: Int, namemenu: String?, price: Int, date: String?): Boolean {
-//        val ih = DatabaseUtils.InsertHelper(database, DatabaseHelper.TABLE_MENU)
-//        // Get the numeric indexes for each of the columns that we're updating
-//
-//        val NameMenu = ih.getColumnIndex(DatabaseHelper.MENU_NAME)
-//        val PriceMenu = ih.getColumnIndex(DatabaseHelper.MENU_PRICE)
-//        val Date = ih.getColumnIndex(DatabaseHelper.MENU_DATE)
-//        val Restaurant_ID = ih.getColumnIndex(DatabaseHelper.RESTAURANT_ID)
-//        try {
-//            // Get the InsertHelper ready to insert a single row
-//            ih.prepareForInsert()
-//
-//            // Add the data for each column
-//            ih.bind(NameMenu, namemenu)
-//            ih.bind(PriceMenu, price)
-//            ih.bind(Date, date)
-//            ih.bind(Restaurant_ID, rest_id)
-//
-//            // Insert the row into the database.
-//            ih.execute()
-//            Log.d("DBManager", "Success")
-//            return true
-//        } catch (e: Exception) {
-//            Log.d("DBManager", e.toString())
-//            return false
-//        } finally {
-//            ih.close() // See comment below from Stefan Anca
-//            Log.d("DBManager", "close")
-//        }
-//    }
+
     fun insertMENU(rest_id: Int, namemenu: String, price: Int, date: String): Long? {
         val cv = ContentValues()
         cv.put(DatabaseHelper.RESTAURANT_ID, rest_id)

@@ -31,17 +31,16 @@ class FoodNameAdapter(
 
     private class ItemViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-//        var textName: TextView
-//
-//        init {
-//            textName = itemView.findViewById(R.id.restaurantname_tv)
-//        }
+        var textName: TextView = itemView.findViewById(R.id.foodname_tv)
+        var textPrice: TextView = itemView.findViewById(R.id.foodprice_tv)
+
     }
 
     private fun ItemRows(holder: ItemViewHolder, position: Int) {
-//        val currentItem: RestNameItem = this.mNameList!![position]
-//
-//        holder.textName.text = currentItem.getQueue()
+        val currentItem: FoodnameItem = this.mNameList!![position]
+
+        holder.textName.text = currentItem.getFoodname()
+        holder.textPrice.text = currentItem.getFoodprice()
 
 
     }

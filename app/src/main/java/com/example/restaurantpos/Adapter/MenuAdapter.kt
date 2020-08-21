@@ -33,16 +33,15 @@ class MenuAdapter(
 
     private class ItemViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        var textName: TextView
+        var textName: TextView = itemView.findViewById(R.id.txt_menuname)
+        var textPrice: TextView = itemView.findViewById(R.id.txt_menuprice)
 
-        init {
-            textName = itemView.findViewById(R.id.txt_menuname)
-        }
     }
 
     private fun ItemRows(holder: ItemViewHolder, position: Int) {
         val currentItem: FoodnameItem = this.mNameList!![position]
         holder.textName.text = currentItem.getFoodname()
+        holder.textPrice.text = currentItem.getFoodprice()
 
 
     }

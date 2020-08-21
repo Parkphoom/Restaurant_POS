@@ -211,14 +211,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
                 values = dataDB[i] as JSONObject?
                 try {
                     val Restaurant_ID = values!!.getInt(DatabaseHelper.RESTAURANT_ID)
-                    val MenuName = values!!.getString(DatabaseHelper.MENU_NAME)
-                    val MenuDate = values!!.getString(DatabaseHelper.MENU_DATE)
+                    val MenuName = values.getString(DatabaseHelper.MENU_NAME)
+                    val MenuPrice = values.getString(DatabaseHelper.MENU_PRICE)
+                    val MenuDate = values.getString(DatabaseHelper.MENU_DATE)
                     Log.d("dataDB", "$MenuName $Restaurant_ID")
                     if (rest_id == Restaurant_ID) {
                         (foodnameList as ArrayList<FoodnameItem>).add(
-                            FoodnameItem(
-                                MenuName
-                            )
+                            FoodnameItem(MenuName,MenuPrice)
                         )
                     }
 

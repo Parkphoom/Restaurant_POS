@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="txt_size_rvitem_name">36dp</dimen>
+    <dimen name="txt_size_rvitem_name">36sp</dimen>
 </resources>
