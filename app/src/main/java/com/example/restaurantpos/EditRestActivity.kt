@@ -1,15 +1,13 @@
 package com.example.restaurantpos
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +25,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
+
 
 class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -45,6 +45,14 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
     var name: String = ""
     var rest_id: Int = -1
+
+    interface OnDelete {
+
+        fun ondeletemenu() {
+
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_rest)
@@ -67,9 +75,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
         name = intent.getStringExtra(resources.getString(R.string.headeredit))
         rest_id = intent.getIntExtra(getString(R.string.rest_id), -1)
-        if (rest_id != -1) {
-            loadMenuTask().execute()
-        }
+
         Log.d("rest_id", "initView:$rest_id ")
         headeredit = findViewById(R.id.headeredit)
         restnameEdt = findViewById(R.id.editRestname)
@@ -85,6 +91,13 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onResume: ")
+        if (rest_id != -1) {
+            loadMenuTask().execute()
+        }
+    }
 
     private fun setUpRecyclerViewFoodname(arrayList: ArrayList<FoodnameItem>) {
         runOnUiThread(Runnable {
@@ -94,7 +107,12 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvFoodName!!.setHasFixedSize(true)
             rvFoodName!!.setLayoutManager(layoutManager)
-            menuAdapter = MenuAdapter(this, arrayList)
+            menuAdapter = MenuAdapter(this, arrayList,dbMenuManager,object : OnDelete{
+                override fun ondeletemenu() {
+                    super.ondeletemenu()
+                    loadMenuTask().execute()
+                }
+            })
             rvFoodName!!.setAdapter(menuAdapter)
         })
     }
@@ -123,23 +141,13 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.add_btn -> {
                 if (rest_id != -1) {
-                    val dateTime = SimpleDateFormat("yyyy/MM/dd HH:mm")
-                    val dateTimeNow = dateTime.format(Date())
-                    dbMenuManager?.open()
-                    Log.d(
-                        "dbMenuManager",
-                        dbMenuManager?.insertMENU(rest_id, "ข้าวมันไก่", 35, dateTimeNow)
-                            .toString()!!
-                    )
-//                    if (dbMenuManager?.insertMENU(rest_id, "ข้าวมันไก่", 35, dateTimeNow)!!) {
 
-//                        Toast.makeText(this, getString(R.string.SaveSuccess), Toast.LENGTH_SHORT)
-//                            .show()
-//                    } else {
-//                        Toast.makeText(this, getString(R.string.SaveFailed), Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-                    dbMenuManager!!.close()
+                    startActivity(
+                        Intent(this, AddMenuActivity::class.java)
+                        .putExtra(resources.getString(R.string.headeredit),name)
+                        .putExtra(resources.getString(R.string.rest_id),rest_id))
+
+
                 }
 
             }
@@ -339,6 +347,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
                     if (rest_id == Restaurant_ID) {
                         (foodnameList as ArrayList<FoodnameItem>).add(
                             FoodnameItem(
+                                Restaurant_ID,
                                 MenuName,
                                 MenuPrice
                             )
@@ -361,4 +370,6 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
+
 }

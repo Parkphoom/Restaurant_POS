@@ -18,7 +18,7 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="@dimen/txt_size_rvitem_name" />
+        android:textSize="@dimen/txt_size_rvitem_name_L" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editRestname_text_layout"
@@ -83,7 +83,7 @@
             android:paddingBottom="10dp"
             android:text="@string/Delete"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_size_rvitem_name" />
+            android:textSize="@dimen/txt_size_rvitem_name_L" />
 
         <Button
             android:id="@+id/save_btn"
@@ -97,7 +97,7 @@
             android:paddingBottom="10dp"
             android:text="@string/save"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_size_rvitem_name" />
+            android:textSize="@dimen/txt_size_rvitem_name_L" />
 
     </LinearLayout>
 

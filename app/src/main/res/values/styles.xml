@@ -36,4 +36,13 @@
     <style name="customToolbar" parent="">
         <item name="background">@android:color/transparent</item>
     </style>
+
+    <style name="TintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/green_active</item>
+        <item name="android:windowAnimationStyle">@style/PauseDialogAnimation</item>
+    </style>
+    <style name="PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/slide_out_right</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_in_left</item>
+    </style>
 </resources>

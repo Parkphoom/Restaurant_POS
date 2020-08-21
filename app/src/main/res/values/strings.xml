@@ -15,4 +15,10 @@
     <string name="DeleteFailed">ลบไม่สำเร็จ</string>
     <string name="NameMatch_Error">ไม่สามารถใช้ชื่อนี้ได้ ชื่อนี้ถูกใช้แล้ว</string>
     <string name="rest_id">Restaurant_Id</string>
+    <string name="addmenu">เพิ่มรายการอาหาร</string>
+    <string name="cancle">ยกเลิก</string>
+    <string name="agree">ตกลง</string>
+    <string name="menuname">ชื่อรายการ</string>
+    <string name="price">ราคา</string>
+    <string name="Textempty">กรุณากรอกข้อมูลนี้</string>
 </resources>

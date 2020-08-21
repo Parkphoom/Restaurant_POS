@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddMenuActivity">
+
+    <LinearLayout
+        android:id="@+id/headerlayout"
+        android:gravity="center"
+        android:background="@color/green_active"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:background="@drawable/icons8_restaurant_menu_60px_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textaddmenu"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/txt_size_rvitem_name_L"
+        android:text="@string/addmenu"
+        android:layout_below="@+id/headerlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editMenuname_text_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textaddmenu"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:hint="@string/RestaurantName"
+        android:textColorHint="@color/black"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editMenuname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:textSize="28sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editPrice_text_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editMenuname_text_layout"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:hint="@string/price"
+        android:textColorHint="@color/black"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
+            android:textSize="28sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/green_btn"
+        android:paddingStart="50dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="50dp"
+        android:paddingBottom="10dp"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_size_rvitem_name_L" />
+
+</RelativeLayout>

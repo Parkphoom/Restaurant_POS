@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -217,7 +216,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
                     Log.d("dataDB", "$MenuName $Restaurant_ID")
                     if (rest_id == Restaurant_ID) {
                         (foodnameList as ArrayList<FoodnameItem>).add(
-                            FoodnameItem(MenuName,MenuPrice)
+                            FoodnameItem(Restaurant_ID, MenuName, MenuPrice)
                         )
                     }
 

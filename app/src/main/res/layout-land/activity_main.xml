@@ -36,7 +36,7 @@
         android:gravity="center"
         android:text="0.0"
         android:textAlignment="center"
-        android:textSize="@dimen/txt_size_rvitem_name" />
+        android:textSize="@dimen/txt_size_rvitem_name_L" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/cart_btn"

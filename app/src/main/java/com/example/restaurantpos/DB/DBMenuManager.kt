@@ -153,12 +153,16 @@ class DBMenuManager(private val context: Context) {
         )!! > 0
     }
 
-    fun deleteMENU(name: String) {
+    fun deleteMENU(rest_id: Int,name: String): Boolean {
         try {
-            database?.execSQL("DELETE FROM " + DatabaseHelper.TABLE_MENU + " WHERE " + DatabaseHelper.MENU_NAME + "= '" + name + "'");
-
+            database?.execSQL("DELETE FROM " + DatabaseHelper.TABLE_MENU +
+                    " WHERE " + DatabaseHelper.RESTAURANT_ID + "= '" + rest_id + "'" +
+                    " AND " +
+                    DatabaseHelper.MENU_NAME + "= '" + name + "'");
+            return true
         } catch (e: Exception) {
             Log.e(TAG, "deleteMENU: $e")
+            return false
         }
 
     }

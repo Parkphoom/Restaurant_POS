@@ -22,7 +22,7 @@
             android:padding="10dp"
             android:text=""
             android:textAlignment="textStart"
-            android:textSize="@dimen/txt_size_rvitem_name" />
+            android:textSize="@dimen/txt_size_rvitem_name_L" />
 
         <TextView
             android:id="@+id/txt_menuprice"
@@ -33,7 +33,7 @@
             android:text=""
             android:gravity="center"
             android:textAlignment="textStart"
-            android:textSize="@dimen/txt_size_rvitem_name"
+            android:textSize="@dimen/txt_size_rvitem_name_L"
             tools:ignore="RtlCompat"
             app:drawableLeftCompat="@drawable/icons8_thai_baht_64px" />
     </LinearLayout>
