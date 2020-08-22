@@ -141,15 +141,11 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.add_btn -> {
                 if (rest_id != -1) {
-
                     startActivity(
                         Intent(this, AddMenuActivity::class.java)
                         .putExtra(resources.getString(R.string.headeredit),name)
                         .putExtra(resources.getString(R.string.rest_id),rest_id))
-
-
                 }
-
             }
         }
     }

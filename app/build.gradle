@@ -42,4 +42,6 @@ dependencies {
     // Material Dialog Library
     implementation 'com.shreyaspatil:MaterialDialog:2.1'
     implementation 'com.yarolegovich:lovely-dialog:1.1.1'
+    //snackbar
+    implementation 'org.aviran.cookiebar2:cookiebar2:1.1.3'
 }

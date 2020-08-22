@@ -1,12 +1,16 @@
 package com.example.restaurantpos
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +22,15 @@ import com.example.restaurantpos.DB.DBMenuManager
 import com.example.restaurantpos.DB.DBRestaurantManager
 import com.example.restaurantpos.DB.DatabaseHelper
 import com.example.restaurantpos.DB.OnclickItem
+import kotlinx.android.synthetic.main.cart_view.*
+import org.aviran.cookiebar2.CookieBar
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Method
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var dbRestaurantManager: DBRestaurantManager? = null
     private var dbMenuManager: DBMenuManager? = null
@@ -36,6 +42,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
     private var foodnameList: List<FoodnameItem>? = null
     private var menu_btn: Button? = null
     lateinit var dataDB: MutableList<*>
+    var sharedPreferences: SharedPreferences? = null
+    var listmenu: ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +51,59 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
 
         initView()
 
-
     }
 
     override fun onStart() {
         super.onStart()
         loadRestautantTask().execute()
+        val iscart = sharedPreferences?.getBoolean(getString(R.string.CartStatus), false)
+        if (iscart!!) {
+            sharedPreferences?.edit()
+                ?.putBoolean(getString(R.string.CartStatus), true)
+                ?.apply()
+
+            val set: Set<String> =
+                sharedPreferences?.getStringSet(getString(R.string.Incart_listMenu), null) as Set<String>
+            val ar: ArrayList<String> = ArrayList()
+            listmenu = ar
+//        String lists = pref.getString(getString(R.string.listcartypeSetting), "");
+            //        String lists = pref.getString(getString(R.string.listcartypeSetting), "");
+            if (set != null && !set.isEmpty()) {
+                ar.addAll(set)
+                Log.d("listpref", java.lang.String.valueOf(ar))
+                //            String[] playlists = set.split(",");
+                for (i in 0 until ar.size) {
+
+                }
+            }
+
+            val c = CookieBar.build(this@MainActivity)
+                .setCustomView(R.layout.cart_view)
+                .setCustomViewInitializer { view ->
+                    val tv_menucount = findViewById<TextView>(R.id.tv_menucount)
+                    val btnListener =
+                        View.OnClickListener { view ->
+                        }
+
+
+                }
+                .setAction(
+                    "Close"
+                ) { CookieBar.dismiss(this@MainActivity) }
+                .setTitle("")
+                .setEnableAutoDismiss(false)
+                .setSwipeToDismiss(false)
+                .setCookiePosition(Gravity.BOTTOM)
+                .show()
+        }else{
+            listmenu = ArrayList()
+        }
+
     }
 
     private fun initView() {
+        sharedPreferences = getSharedPreferences(getString(R.string.RestaurantPref), MODE_PRIVATE)
+
         dbRestaurantManager = DBRestaurantManager(this)
         dbMenuManager = DBMenuManager(this)
 
@@ -132,13 +184,91 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnclickItem {
         runOnUiThread(Runnable {
             rvFoodName = findViewById<RecyclerView>(R.id.rvFoodmenu)
 
+
             val layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvFoodName!!.setHasFixedSize(true)
             rvFoodName!!.setLayoutManager(layoutManager)
-            foodNameAdapter = FoodNameAdapter(this, arrayList)
+            foodNameAdapter = FoodNameAdapter(this, arrayList, object : OnclickItem {
+                override fun onItemClick(
+                    restaurantId: Int?,
+                    menu_name: String?,
+                    menu_price: String?
+                ) {
+                    super.onItemClick(restaurantId, menu_name, menu_price)
+                    lateinit var namelist: MutableList<*>
+
+
+                    dbRestaurantManager?.open()
+                    namelist = dbRestaurantManager?.getRESTAURANT_name(restaurantId!!)!!
+                    dbRestaurantManager!!.close()
+                    var RestaurantName = ""
+                    for (i in 0 until namelist.size) {
+                        Log.d("dataDB", namelist[i].toString())
+                        var values: JSONObject? = JSONObject()
+                        values = namelist[i] as JSONObject?
+                        try {
+                            RestaurantName = values!!.getString(DatabaseHelper.RESTAURANT_NAME)
+                            Log.d("dataDB", "$RestaurantName")
+                        } catch (e: JSONException) {
+                            e.printStackTrace();
+                            Log.d("dataDB", e.toString())
+                        }
+                    }
+
+                    if (RestaurantName.isNotEmpty()) {
+                        if (!sharedPreferences?.getBoolean(
+                                getString(R.string.CartStatus),
+                                false
+                            )!!
+                        ) {
+                            listmenu!!.add(menu_name.toString())
+                            val set: MutableSet<String> = HashSet()
+                            set.addAll(listmenu!!)
+
+                            sharedPreferences?.edit()
+                                ?.putBoolean(getString(R.string.CartStatus), true)
+                                ?.apply()
+                            sharedPreferences?.edit()
+                                ?.putInt(getString(R.string.Incart_restID), restaurantId!!)
+                                ?.apply()
+                            sharedPreferences?.edit()
+                                ?.putStringSet(getString(R.string.Incart_listMenu), set)
+                                ?.apply()
+
+                            val c = CookieBar.build(this@MainActivity)
+                                .setCustomView(R.layout.cart_view)
+                                .setCustomViewInitializer { view ->
+                                    val tv_menucount = findViewById<TextView>(R.id.tv_menucount)
+                                    val btnListener =
+                                        View.OnClickListener { view ->
+                                        }
+
+
+                                }
+                                .setAction(
+                                    "Close"
+                                ) { CookieBar.dismiss(this@MainActivity) }
+                                .setTitle(RestaurantName)
+                                .setEnableAutoDismiss(false)
+                                .setSwipeToDismiss(false)
+                                .setCookiePosition(Gravity.BOTTOM)
+                                .show()
+                        } else {
+                            tv_menucount.text = "1"
+                        }
+
+
+                    }
+
+                }
+            })
             rvFoodName!!.setAdapter(foodNameAdapter)
         })
+    }
+
+    fun cart() {
+
     }
 
     override fun onClick(v: View?) {
