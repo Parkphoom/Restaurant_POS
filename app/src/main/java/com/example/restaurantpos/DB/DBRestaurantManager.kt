@@ -108,6 +108,45 @@ class DBRestaurantManager(private val context: Context) {
         cursor.close()
         return data
     }
+    fun getRESTAURANT_menu_price(rest_id: Int): MutableList<Any?> {
+        val selectQuery =
+            "SELECT " + DatabaseHelper.MENU_NAME + "," + DatabaseHelper.MENU_PRICE + " "+
+                    "FROM " + DatabaseHelper.TABLE_MENU +
+                    " WHERE " + DatabaseHelper.RESTAURANT_ID + "= '" + rest_id + "'"
+        database = dbHelper!!.readableDatabase
+        val cursor = database!!.rawQuery(selectQuery, null)
+        //        Cursor cursor = database.query(DATABASE_TABLE, rank, null, null, null, null, yourColumn+" DESC");
+        val data: MutableList<Any?> = mutableListOf<Any?>()
+        Log.d("cursorr", "getDataRESTAURANT")
+        Log.d("cursorr", cursor.toString())
+        database!!.beginTransaction()
+        try {
+            for (j in 0 until cursor.count) {
+                // execute SQL
+
+                // get the data into array, or class variable
+                cursor.moveToNext()
+                val obj = JSONObject()
+                for (i in 0 until cursor.columnCount) {
+                    Log.d("DBBBBB", cursor.getColumnName(i))
+                    Log.d("DBBBBB", cursor.getString(i))
+                    try {
+                        obj.put(cursor.getColumnName(i), cursor.getString(i))
+                    } catch (e: JSONException) {
+                        Log.d("DBBBBB", e.toString())
+                        e.printStackTrace()
+                    }
+                }
+                data.add(obj)
+
+            }
+            database!!.setTransactionSuccessful() // marks a commit
+        } finally {
+            database!!.endTransaction()
+        }
+        cursor.close()
+        return data
+    }
 
     fun getDataRESTAURANT(): MutableList<Any?>? {
         val selectQuery =
