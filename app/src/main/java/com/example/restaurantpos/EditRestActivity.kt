@@ -158,7 +158,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
                 .setMessage("ข้อมูลร้านค้า และรายการอาหารทั้งหมดจะหายไป")
                 .setCancelable(true)
                 .setPositiveButton(
-                    "Delete",
+                    "ลบ",
                     R.drawable.icons8_delete_bin_48px_white
                 ) { dialogInterface, which ->
                     dbRestaurantManager?.open()
@@ -173,7 +173,7 @@ class EditRestActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
                 .setNegativeButton(
-                    "Cancel",
+                    "ยกเลิก",
                     R.drawable.icons8_cancel_52px
                 ) { dialogInterface, which -> dialogInterface.dismiss() }
                 .build()

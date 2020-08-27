@@ -10,9 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:windowSoftInputMode="adjustPan|adjustResize">
-        <activity android:name=".AddMenuActivity"></activity>
+        <activity android:name=".AddMenuActivity" />
         <activity android:name=".EditRestActivity" />
         <activity android:name=".AddActivity" />
+        <activity android:name=".CartActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

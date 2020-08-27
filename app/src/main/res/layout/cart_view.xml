@@ -5,21 +5,29 @@
     android:id="@+id/cookie"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/custom_bg"
     android:gravity="center_vertical">
 
 
     <ImageView
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/bg"
+        android:background="@drawable/custom_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@id/price_ic"
+        />
 
+    <ImageView
+        android:layout_marginStart="10dp"
         android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/icons8_shopping_cart_60px_1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="36dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -44,6 +52,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"/>
+
+    <ImageView
+        android:id="@+id/price_ic"
+        android:background="@drawable/icons8_thai_baht_64px_1"
+        android:layout_toStartOf="@+id/tv_menuprice"
+        android:layout_marginTop="40dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
     <TextView
         android:layout_alignParentEnd="true"
         android:id="@+id/tv_menuprice"

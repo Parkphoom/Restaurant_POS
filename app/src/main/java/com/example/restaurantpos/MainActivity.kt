@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewManager
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,9 +22,10 @@ import com.example.restaurantpos.DB.DBMenuManager
 import com.example.restaurantpos.DB.DBRestaurantManager
 import com.example.restaurantpos.DB.DatabaseHelper
 import com.example.restaurantpos.DB.OnclickItem
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.shreyaspatil.MaterialDialog.MaterialDialog
 import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.cart_view.*
 import org.aviran.cookiebar2.CookieBar
 import org.json.JSONException
 import org.json.JSONObject
@@ -120,40 +123,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setCustomView(R.layout.cart_view)
                 .setCustomViewInitializer { view ->
                     val iv_icon = view.findViewById<ImageView>(R.id.iv_icon)
+                    val bg = view.findViewById<ImageView>(R.id.bg)
                     tv_menucount = view.findViewById<TextView>(R.id.tv_menucount)
                     tv_menuprice = view.findViewById<TextView>(R.id.tv_menuprice)
 
-                    tv_menucount?.text = listmenu!!.size.toString()
+                    tv_menucount?.text = "${listmenu!!.size} รายการ"
                     tv_menuprice?.text = price.toString()
                     Log.d("tv_menucount", tv_menucount?.id.toString())
 
                     val btnListener =
                         View.OnClickListener { view ->
-                            val button = view as ImageView
-
-                            if (button == iv_icon) {
+                            if (view == iv_icon) {
                                 Log.d("asd", "onItemClick: ")
-                                sharedPreferences?.edit()
-                                    ?.putBoolean(
-                                        getString(R.string.CartStatus),
-                                        false
-                                    )
-                                    ?.apply()
-                                sharedPreferences?.edit()
-                                    ?.putInt(getString(R.string.Incart_restID), -1)
-                                    ?.apply()
-                                sharedPreferences?.edit()
-                                    ?.putString(
-                                        getString(R.string.Incart_listMenu),
-                                        ""
-                                    )
-                                    ?.apply()
-                                tv_menucount?.clearFindViewByIdCache()
-                                CookieBar.dismiss(this@MainActivity);
+                                clearCart()
                             }
+                            if (view == bg) {
+                              goToCart()
+                            }
+
                         }
 
                     iv_icon.setOnClickListener(btnListener)
+                    bg.setOnClickListener(btnListener)
 
                 }
                 .setAction(
@@ -268,8 +259,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     super.onItemClick(restaurantId, menu_name, menu_price)
                     lateinit var namelist: MutableList<*>
 
-
-
                     dbRestaurantManager?.open()
                     namelist = dbRestaurantManager?.getRESTAURANT_name(restaurantId!!)!!
                     dbRestaurantManager!!.close()
@@ -295,83 +284,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                 false
                             )!!
                         ) {
-                            Log.d("addcart", "no")
-                            Log.d("addcart", menu_name.toString())
-                            Log.d("addcart", menu_price.toString())
-                            listmenu = ArrayList()
-                            listmenu!!.add(menu_name.toString().replace(" ", ""))
-                            val sb = StringBuilder()
-                            for (i in 0 until listmenu!!.size) {
-                                sb.append(listmenu!![i].replace(", ", "")).append(",")
-                            }
-                            Log.d("addcart", listmenu.toString())
-                            Log.d("addcart", sb.toString())
-
-
-                            sharedPreferences?.edit()
-                                ?.putBoolean(getString(R.string.CartStatus), true)
-                                ?.apply()
-                            sharedPreferences?.edit()
-                                ?.putInt(getString(R.string.Incart_restID), restaurantId!!)
-                                ?.apply()
-                            sharedPreferences?.edit()
-                                ?.putString(getString(R.string.Incart_listMenu), sb.toString())
-                                ?.apply()
-
-                            val cookieBar = CookieBar.build(this@MainActivity)
-                                .setCustomView(R.layout.cart_view)
-                                .setCustomViewInitializer { view ->
-                                    val iv_icon = view.findViewById<ImageView>(R.id.iv_icon)
-                                    tv_menucount = view.findViewById(R.id.tv_menucount)
-                                    tv_menuprice = view.findViewById(R.id.tv_menuprice)
-
-
-                                    val btnListener =
-                                        View.OnClickListener { view ->
-                                            val button = view as ImageView
-                                            if (button == iv_icon) {
-                                                Log.d("asd", "onItemClick: ")
-                                                sharedPreferences?.edit()
-                                                    ?.putBoolean(
-                                                        getString(R.string.CartStatus),
-                                                        false
-                                                    )
-                                                    ?.apply()
-                                                sharedPreferences?.edit()
-                                                    ?.putInt(getString(R.string.Incart_restID), -1)
-                                                    ?.apply()
-                                                sharedPreferences?.edit()
-                                                    ?.putString(
-                                                        getString(R.string.Incart_listMenu),
-                                                        ""
-                                                    )
-                                                    ?.apply()
-                                                tv_menucount?.clearFindViewByIdCache()
-                                                tv_menuprice?.clearFindViewByIdCache()
-                                                CookieBar.dismiss(this@MainActivity);
-                                            }
-                                        }
-
-                                    iv_icon.setOnClickListener(btnListener)
-
-                                }
-                                .setAction(
-                                    "Close"
-                                ) { CookieBar.dismiss(this@MainActivity) }
-                                .setTitle(RestaurantName)
-                                .setEnableAutoDismiss(false)
-                                .setSwipeToDismiss(false)
-                                .setCookiePosition(Gravity.BOTTOM)
-                                .show()
-                            tv_menucount?.text = listmenu!!.size.toString()
-                            tv_menuprice?.text = menu_price.toString()
-                            Log.d("tv_menucount", tv_menucount?.id.toString())
+                            addNeworder(
+                                restaurantId!!,
+                                RestaurantName,
+                                menu_name.toString(),
+                                menu_price
+                            )
                         } else {
-                            var rest_id = sharedPreferences?.getInt(getString(R.string.Incart_restID), -1)
-                            if(rest_id != restaurantId){
-                                createDeleteDialog("ไม่สามารถเลือกเมนูจากร้านอื่นได้")
-                            }
-                            else if (restaurantId != -1 && rest_id == restaurantId) {
+                            var rest_id =
+                                sharedPreferences?.getInt(getString(R.string.Incart_restID), -1)
+                            if (rest_id != restaurantId) {
+                                createDeleteDialog(
+                                    restaurantId!!,
+                                    RestaurantName,
+                                    menu_name.toString(),
+                                    menu_price
+                                )
+                            } else if (restaurantId != -1 && rest_id == restaurantId) {
                                 lateinit var pricelist: MutableList<*>
                                 var price = 0
                                 dbRestaurantManager?.open()
@@ -392,9 +321,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                     for (j in 0 until pricelist.size) {
                                         var values: JSONObject? = pricelist[j] as JSONObject?
                                         try {
-                                           if(listmenu!![i] == values!!.getString(DatabaseHelper.MENU_NAME)){
-                                               price += values.getInt(DatabaseHelper.MENU_PRICE)
-                                           }
+                                            if (listmenu!![i] == values!!.getString(DatabaseHelper.MENU_NAME)) {
+                                                price += values.getInt(DatabaseHelper.MENU_PRICE)
+                                            }
                                         } catch (e: JSONException) {
                                             e.printStackTrace();
                                             Log.d("dataDB", e.toString())
@@ -408,7 +337,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                     ?.putString(getString(R.string.Incart_listMenu), sb.toString())
                                     ?.apply()
 
-                                tv_menucount?.text = listmenu!!.size.toString()
+                                tv_menucount?.text = "${listmenu!!.size} รายการ"
                                 tv_menuprice?.text = price.toString()
                                 Log.d("tv_menucount", tv_menucount?.id.toString())
                             }
@@ -424,9 +353,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    fun cart() {
 
-    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
@@ -526,32 +453,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        CookieBar.dismiss(this@MainActivity);
+        CookieBar.dismiss(this@MainActivity)
     }
 
-    private fun createDeleteDialog(name: String) {
+    private fun createDeleteDialog(
+        restaurantId: Int,
+        RestaurantName: String,
+        menu_name: String,
+        menu_price: String?
+    ) {
         runOnUiThread(Runnable {
             val mDialog = MaterialDialog.Builder(this)
-                .setTitle("ลบร้านค้า?")
-                .setMessage("ข้อมูลร้านค้า และรายการอาหารทั้งหมดจะหายไป")
+                .setTitle("เริ่มตะกร้าใหม่?")
+                .setMessage("หากคุณเลือกร้านอื่น รายการที่เลือกจากร้านเดิมจะถูกลบออก")
                 .setCancelable(true)
                 .setPositiveButton(
-                    "Delete",
-                    R.drawable.icons8_delete_bin_48px_white
+                    "ตกลง",
+                    R.drawable.icons8_shopping_cart_60px_1
                 ) { dialogInterface, which ->
-                    dbRestaurantManager?.open()
-                    dbRestaurantManager?.deleteRESTAURANT(name)
-                    dbRestaurantManager?.close()
 
-                    Toast.makeText(this, getString(R.string.DeleteSuccess), Toast.LENGTH_SHORT)
-                        .show()
+                    clearCart()
+
                     dialogInterface.dismiss()
-                    finish()
 
+                    addNeworder(restaurantId!!, RestaurantName, menu_name, menu_price)
 
                 }
                 .setNegativeButton(
-                    "Cancel",
+                    "ยกเลิก",
                     R.drawable.icons8_cancel_52px
                 ) { dialogInterface, which -> dialogInterface.dismiss() }
                 .build()
@@ -559,5 +488,95 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             // Show Dialog
             mDialog.show()
         })
+    }
+
+    private fun addNeworder(
+        restaurantId: Int,
+        RestaurantName: String,
+        menu_name: String,
+        menu_price: String?
+    ) {
+        Log.d("addcart", "no")
+        Log.d("addcart", menu_name.toString())
+        Log.d("addcart", menu_price.toString())
+        listmenu = ArrayList()
+        listmenu!!.add(menu_name.toString().replace(" ", ""))
+        val sb = StringBuilder()
+        for (i in 0 until listmenu!!.size) {
+            sb.append(listmenu!![i].replace(", ", "")).append(",")
+        }
+        Log.d("addcart", listmenu.toString())
+        Log.d("addcart", sb.toString())
+
+
+        sharedPreferences?.edit()
+            ?.putBoolean(getString(R.string.CartStatus), true)
+            ?.apply()
+        sharedPreferences?.edit()
+            ?.putInt(getString(R.string.Incart_restID), restaurantId!!)
+            ?.apply()
+        sharedPreferences?.edit()
+            ?.putString(getString(R.string.Incart_listMenu), sb.toString())
+            ?.apply()
+
+        val cookieBar = CookieBar.build(this@MainActivity)
+            .setCustomView(R.layout.cart_view)
+            .setCustomViewInitializer { view ->
+                val iv_icon = view.findViewById<ImageView>(R.id.iv_icon)
+                val bg = view.findViewById<ImageView>(R.id.bg)
+
+                tv_menucount = view.findViewById(R.id.tv_menucount)
+                tv_menuprice = view.findViewById(R.id.tv_menuprice)
+                val btnListener =
+                    View.OnClickListener { view ->
+                        if (view == iv_icon) {
+                            Log.d("asd", "onItemClick: ")
+                            clearCart()
+                        }
+                        if (view == bg) {
+                            goToCart()
+                        }
+                    }
+                iv_icon.setOnClickListener(btnListener)
+                bg.setOnClickListener(btnListener)
+
+            }
+            .setAction(
+                "Close"
+            ) { CookieBar.dismiss(this@MainActivity) }
+            .setTitle(RestaurantName)
+            .setEnableAutoDismiss(false)
+            .setSwipeToDismiss(false)
+            .setCookiePosition(Gravity.BOTTOM)
+            .show()
+
+        tv_menucount?.text = "${listmenu!!.size} รายการ"
+        tv_menuprice?.text = menu_price.toString()
+        Log.d("tv_menucount", tv_menucount?.id.toString())
+    }
+
+    private fun clearCart(){
+        sharedPreferences?.edit()
+            ?.putBoolean(
+                getString(R.string.CartStatus),
+                false
+            )
+            ?.apply()
+        sharedPreferences?.edit()
+            ?.putInt(getString(R.string.Incart_restID), -1)
+            ?.apply()
+        sharedPreferences?.edit()
+            ?.putString(
+                getString(R.string.Incart_listMenu),
+                ""
+            )
+            ?.apply()
+        tv_menucount?.clearFindViewByIdCache()
+        tv_menuprice?.clearFindViewByIdCache()
+        CookieBar.dismiss(this@MainActivity);
+    }
+
+    private fun goToCart(){
+     startActivity(Intent(this, CartActivity::class.java))
     }
 }
