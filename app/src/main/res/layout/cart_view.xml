@@ -24,7 +24,7 @@
         android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/icons8_shopping_cart_60px_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
         android:layout_marginTop="8dp"
         android:maxLines="1"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
+        android:textSize="@dimen/txt_size_rvitem_name_L"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -51,13 +51,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="60dp"/>
 
     <ImageView
         android:id="@+id/price_ic"
         android:background="@drawable/icons8_thai_baht_64px_1"
         android:layout_toStartOf="@+id/tv_menuprice"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:layout_width="48dp"
         android:layout_height="48dp"/>
 
@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="60dp"/>
 
 
 </RelativeLayout>

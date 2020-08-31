@@ -15,12 +15,20 @@
 
     <TextView
         android:id="@+id/tv_restname"
-        android:textSize="@dimen/txt_size_rvitem_name_L"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textSize="@dimen/txt_size_rvitem_name_L" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_restname"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" />
 
     <Button
         android:id="@+id/pay_btn"
