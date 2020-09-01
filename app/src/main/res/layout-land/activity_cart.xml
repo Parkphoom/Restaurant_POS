@@ -22,26 +22,81 @@
         android:layout_marginTop="5dp"
         android:textSize="@dimen/txt_size_rvitem_name_L" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_restname"
+    <RelativeLayout
+        android:background="@color/white"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal" />
+        android:layout_below="@+id/tv_restname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:id="@+id/txtallmenu"
+            android:text="@string/allmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/pay_btn"
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/txtallmenu"
+            android:id="@+id/rvCart"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/green_btn"
-        android:padding="20dp"
-        android:text="@string/Pay"
-        android:textColor="@color/white"
-        android:textSize="@dimen/txt_size_rvitem_name_M" />
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/paydetail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_alignParentStart="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size_rvitem_name_S"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="รวมทั้งหมด" />
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size_rvitem_name_S"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thaibaht" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/pay_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/paydetail_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/green_btn"
+            android:padding="5dp"
+            android:text="@string/Pay"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_rvitem_name_M" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

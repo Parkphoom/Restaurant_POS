@@ -1,5 +1,6 @@
 package com.example.restaurantpos
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
@@ -34,7 +35,8 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var cartAdapter: CartAdapter
     var rvCart: RecyclerView? = null
 
-    private var tv_restname :TextView?=null
+    private var tvrestname :TextView?=null
+    private var tvtotal :TextView?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +57,8 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
         backbtn?.setOnClickListener(this)
         paybtn = findViewById(R.id.pay_btn)
         paybtn?.setOnClickListener(this)
-        tv_restname = findViewById(R.id.tv_restname)
+        tvrestname = findViewById(R.id.tv_restname)
+        tvtotal = findViewById(R.id.tv_total)
     }
 
     override fun onClick(v: View?) {
@@ -63,8 +66,23 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
             R.id.back_btn ->{
                 onBackPressed()
             }
-            R.id.pay_btn ->{
-                Log.d(TAG, "onClick: ")
+            R.id.pay_btn -> {
+                sharedPreferences?.edit()
+                    ?.putBoolean(
+                        getString(R.string.CartStatus),
+                        false
+                    )
+                    ?.apply()
+                sharedPreferences?.edit()
+                    ?.putInt(getString(R.string.Incart_restID), -1)
+                    ?.apply()
+                sharedPreferences?.edit()
+                    ?.putString(
+                        getString(R.string.Incart_listMenu),
+                        ""
+                    )
+                    ?.apply()
+                finish()
             }
         }
     }
@@ -81,6 +99,7 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun onItemInCart() {
         var playlists = sharedPreferences?.getString(getString(R.string.Incart_listMenu), "")
         var rest_id = sharedPreferences?.getInt(getString(R.string.Incart_restID), -1)
@@ -95,8 +114,7 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
             lateinit var pricelist: MutableList<*>
             var price = 0
             dbRestaurantManager?.open()
-            pricelist =
-                dbRestaurantManager?.getRESTAURANT_menu_price(rest_id!!)!!
+            pricelist = dbRestaurantManager?.getRESTAURANT_menu_price(rest_id!!)!!
             namelist = dbRestaurantManager?.getRESTAURANT_name(rest_id!!)!!
             dbRestaurantManager!!.close()
 
@@ -107,40 +125,42 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
                 values = namelist[i] as JSONObject?
                 try {
                     RestaurantName = values!!.getString(DatabaseHelper.RESTAURANT_NAME)
-                    tv_restname?.text = RestaurantName
+                    tvrestname?.text = RestaurantName
                     Log.d(TAG, "$RestaurantName")
                 } catch (e: JSONException) {
                     e.printStackTrace();
                     Log.d(TAG, e.toString())
                 }
             }
-            val lr = listmenu!!.groupingBy { it }.eachCount().filter { it.value > 1 }
-            val mlistmenu :ArrayList<CartItem> = ArrayList()
+            val lr = listmenu!!.groupingBy { it }.eachCount().filter { it.value >= 1 }
+            val mlistmenu: ArrayList<CartItem> = ArrayList()
             for (entry in lr) {
                 Log.d(TAG, "onItemInCart: ${entry.key} ${entry.value}")
-                mlistmenu.add(CartItem(entry.key,entry.value.toString(),entry.value.toString()))
+                for (j in 0 until pricelist.size) {
+                    var values: JSONObject? = pricelist[j] as JSONObject?
+                    try {
+                        if (entry.key == values!!.getString(DatabaseHelper.MENU_NAME)) {
+                            price +=  values.getInt(DatabaseHelper.MENU_PRICE)*entry.value
+                            mlistmenu.add(
+                                CartItem(
+                                    entry.key,
+                                    values.getInt(DatabaseHelper.MENU_PRICE).toString(),
+                                    entry.value.toString()
+                                )
+                            )
+                            Log.d(TAG, values.getInt(DatabaseHelper.MENU_PRICE).toString())
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace();
+                        Log.d(TAG, e.toString())
+                    }
+                }
+
             }
+
+
             setUpRecyclerViewCart(mlistmenu)
-//            val sb = StringBuilder()
-//            for (i in 0 until listmenu!!.size) {
-//                sb.append(listmenu!![i]).append(",")
-//
-//                for (j in 0 until pricelist.size) {
-//                    var values: JSONObject? = pricelist[j] as JSONObject?
-//                    try {
-//                        if(listmenu!![i] == values!!.getString(DatabaseHelper.MENU_NAME)){
-//                            price += values.getInt(DatabaseHelper.MENU_PRICE)
-//                            Log.d(TAG, listmenu!![i])
-//                        }
-//                    } catch (e: JSONException) {
-//                        e.printStackTrace();
-//                        Log.d(TAG, e.toString())
-//                    }
-//                }
-//
-//            }
-
-
+            tvtotal?.text = "${getString(R.string.thaibaht)} $price"
         }
 
 
@@ -194,8 +214,7 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
         runOnUiThread(Runnable {
             rvCart = findViewById<RecyclerView>(R.id.rvCart)
 
-            val layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             rvCart!!.setHasFixedSize(true)
             rvCart!!.setLayoutManager(layoutManager)
             cartAdapter = CartAdapter(this, arrayList, object : OnclickItem {

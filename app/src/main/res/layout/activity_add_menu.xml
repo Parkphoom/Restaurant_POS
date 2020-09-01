@@ -39,7 +39,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
-        android:hint="@string/RestaurantName"
+        android:hint="@string/menuname"
         android:textColorHint="@color/black"
         app:endIconMode="clear_text"
         app:hintTextColor="@color/black">
@@ -48,7 +48,7 @@
             android:id="@+id/editMenuname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
             android:inputType="textNoSuggestions"
             android:textSize="28sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -64,6 +64,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
         android:hint="@string/price"
+
         android:textColorHint="@color/black"
         app:endIconMode="clear_text"
         app:hintTextColor="@color/black">
@@ -73,10 +74,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="textNoSuggestions"
+            android:inputType="number"
             android:textSize="28sp" />
     </com.google.android.material.textfield.TextInputLayout>
     <Button
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:id="@+id/save_btn"

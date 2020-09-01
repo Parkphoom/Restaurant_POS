@@ -22,8 +22,6 @@ import com.example.restaurantpos.DB.DBMenuManager
 import com.example.restaurantpos.DB.DBRestaurantManager
 import com.example.restaurantpos.DB.DatabaseHelper
 import com.example.restaurantpos.DB.OnclickItem
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.shreyaspatil.MaterialDialog.MaterialDialog
 import kotlinx.android.synthetic.*
 import org.aviran.cookiebar2.CookieBar
@@ -43,11 +41,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     var rvFoodName: RecyclerView? = null
     private var foodnameList: List<FoodnameItem>? = null
     private var menu_btn: Button? = null
+    private var cartbtn: Button? = null
     lateinit var dataDB: MutableList<*>
     var sharedPreferences: SharedPreferences? = null
     var listmenu: ArrayList<String>? = null
     var tv_menucount: TextView? = null
     var tv_menuprice: TextView? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -135,7 +136,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         View.OnClickListener { view ->
                             if (view == iv_icon) {
                                 Log.d("asd", "onItemClick: ")
-                                clearCart()
                             }
                             if (view == bg) {
                               goToCart()
@@ -171,6 +171,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         menu_btn = findViewById(R.id.menu_btn)
         menu_btn!!.setOnClickListener(this)
+        cartbtn = findViewById(R.id.cart_btn)
+        cartbtn!!.setOnClickListener(this)
     }
 
     fun showMenu(anchor: View?) {
@@ -294,7 +296,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             var rest_id =
                                 sharedPreferences?.getInt(getString(R.string.Incart_restID), -1)
                             if (rest_id != restaurantId) {
-                                createDeleteDialog(
+                                createNewCartDialog(
                                     restaurantId!!,
                                     RestaurantName,
                                     menu_name.toString(),
@@ -359,6 +361,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (v!!.id) {
             R.id.menu_btn -> {
                 showMenu(v)
+            }
+            R.id.cart_btn -> {
+                val iscart = sharedPreferences?.getBoolean(getString(R.string.CartStatus), false)
+                if (iscart!!) {
+                    goToCart()
+                }
             }
         }
     }
@@ -456,7 +464,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         CookieBar.dismiss(this@MainActivity)
     }
 
-    private fun createDeleteDialog(
+    private fun createNewCartDialog(
         restaurantId: Int,
         RestaurantName: String,
         menu_name: String,
@@ -531,7 +539,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     View.OnClickListener { view ->
                         if (view == iv_icon) {
                             Log.d("asd", "onItemClick: ")
-                            clearCart()
                         }
                         if (view == bg) {
                             goToCart()

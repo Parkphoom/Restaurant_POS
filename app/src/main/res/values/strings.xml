@@ -28,4 +28,6 @@
     <string name="Incart_restID">Restaurant_ID_Incart</string>
     <string name="Incart_listMenu">All_Menu_incart</string>
     <string name="Pay">ชำระเงิน</string>
+    <string name="thaibaht">฿</string>
+    <string name="allmenu">รายการที่สั่ง</string>
 </resources>
