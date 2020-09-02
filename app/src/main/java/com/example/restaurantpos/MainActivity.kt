@@ -229,7 +229,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             rvRestName!!.setHasFixedSize(true)
             rvRestName!!.setLayoutManager(layoutManager)
-            restuarantNameAdapter = RestuarantNameAdapter(this, arrayList, object : OnclickItem {
+            restuarantNameAdapter =
+                RestuarantNameAdapter(this, arrayList, object : OnclickItem {
                 override fun onItemClick(restaurantId: Int?) {
                     super.onItemClick(restaurantId)
                     Log.d("onItemClick", "onItemClick: ")
