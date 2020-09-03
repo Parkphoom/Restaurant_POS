@@ -2,15 +2,14 @@ package com.example.restaurantpos
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,9 +31,12 @@ import java.lang.reflect.Method
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
+    private var TAG = "MainActivitylog"
+
     private var dbRestaurantManager: DBRestaurantManager? = null
     private var dbMenuManager: DBMenuManager? = null
     private lateinit var restuarantNameAdapter: RestuarantNameAdapter
+    private var Mainac: RelativeLayout? = null
     var rvRestName: RecyclerView? = null
     private var restnameList: List<RestNameItem>? = null
     private lateinit var foodNameAdapter: FoodNameAdapter
@@ -49,6 +51,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     var tv_menuprice: TextView? = null
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -59,6 +63,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        val relativeParams = Mainac?.layoutParams as FrameLayout.LayoutParams
+        relativeParams.setMargins(0, 0, 0, 0) // left, top, right, bottom
+        Mainac!!.setLayoutParams(relativeParams)
+
         loadRestautantTask().execute()
         val iscart = sharedPreferences?.getBoolean(getString(R.string.CartStatus), false)
         if (iscart!!) {
@@ -74,7 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var playlists = sharedPreferences?.getString(getString(R.string.Incart_listMenu), "")
         var rest_id = sharedPreferences?.getInt(getString(R.string.Incart_restID), -1)
         lateinit var namelist: MutableList<*>
-        if(rest_id != -1){
+        if (rest_id != -1) {
             val pattern = """\W+""".toRegex()
             val words = pattern.split(playlists.toString()).filter { it.isNotBlank() }
             listmenu = ArrayList()
@@ -110,11 +118,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 for (j in 0 until pricelist.size) {
                     var values: JSONObject? = pricelist[j] as JSONObject?
                     try {
-                        if(listmenu!![i] == values!!.getString(DatabaseHelper.MENU_NAME)){
+                        if (listmenu!![i] == values!!.getString(DatabaseHelper.MENU_NAME)) {
                             price += values.getInt(DatabaseHelper.MENU_PRICE)
                         }
                     } catch (e: JSONException) {
-                        e.printStackTrace();
+                        e.printStackTrace()
                         Log.d("dataDB", e.toString())
                     }
                 }
@@ -123,7 +131,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val c = CookieBar.build(this@MainActivity)
                 .setCustomView(R.layout.cart_view)
                 .setCustomViewInitializer { view ->
-                    val iv_icon = view.findViewById<ImageView>(R.id.iv_icon)
+
+
                     val bg = view.findViewById<ImageView>(R.id.bg)
                     tv_menucount = view.findViewById<TextView>(R.id.tv_menucount)
                     tv_menuprice = view.findViewById<TextView>(R.id.tv_menuprice)
@@ -132,18 +141,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     tv_menuprice?.text = price.toString()
                     Log.d("tv_menucount", tv_menucount?.id.toString())
 
+
+
                     val btnListener =
                         View.OnClickListener { view ->
-                            if (view == iv_icon) {
-                                Log.d("asd", "onItemClick: ")
-                            }
+
                             if (view == bg) {
-                              goToCart()
+                                goToCart()
                             }
 
                         }
 
-                    iv_icon.setOnClickListener(btnListener)
                     bg.setOnClickListener(btnListener)
 
                 }
@@ -156,19 +164,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .setCookiePosition(Gravity.BOTTOM)
                 .show()
 
+            val relativeParams = Mainac?.layoutParams as FrameLayout.LayoutParams
+            relativeParams.setMargins(0, 0, 0, 70) // left, top, right, bottom
+            Mainac!!.setLayoutParams(relativeParams)
+
+//            val params = Mainac?.layoutParams as RelativeLayout.LayoutParams
+//            params.setMargins(getPX(0), getPX(0), getPX(0), getPX(60))
+//            Mainac!!.setLayoutParams(params)
+
         }
 
 
-
     }
+
+    private fun getPX(s: Int): Int {
+        var r: Resources = this.resources
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            s.toFloat(),
+            r.displayMetrics
+        ).toInt()
+    }
+
 
     private fun initView() {
         sharedPreferences = getSharedPreferences(getString(R.string.RestaurantPref), MODE_PRIVATE)
 
         dbRestaurantManager = DBRestaurantManager(this)
         dbMenuManager = DBMenuManager(this)
-
-
+        Mainac= findViewById(R.id.MainActivity)
         menu_btn = findViewById(R.id.menu_btn)
         menu_btn!!.setOnClickListener(this)
         cartbtn = findViewById(R.id.cart_btn)
@@ -231,15 +255,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             rvRestName!!.setLayoutManager(layoutManager)
             restuarantNameAdapter =
                 RestuarantNameAdapter(this, arrayList, object : OnclickItem {
-                override fun onItemClick(restaurantId: Int?) {
-                    super.onItemClick(restaurantId)
-                    Log.d("onItemClick", "onItemClick: ")
-                    if (restaurantId != null) {
-                        Log.d("onItemClick", "$restaurantId")
-                        loadMenuTask(restaurantId).execute()
+                    override fun onItemClick(restaurantId: Int?) {
+                        super.onItemClick(restaurantId)
+                        Log.d("onItemClick", "onItemClick: ")
+                        if (restaurantId != null) {
+                            Log.d("onItemClick", "$restaurantId")
+                            loadMenuTask(restaurantId).execute()
+                        }
                     }
-                }
-            })
+                })
             rvRestName!!.setAdapter(restuarantNameAdapter)
         })
     }
@@ -355,7 +379,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             rvFoodName!!.setAdapter(foodNameAdapter)
         })
     }
-
 
 
     override fun onClick(v: View?) {
@@ -531,21 +554,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val cookieBar = CookieBar.build(this@MainActivity)
             .setCustomView(R.layout.cart_view)
             .setCustomViewInitializer { view ->
-                val iv_icon = view.findViewById<ImageView>(R.id.iv_icon)
                 val bg = view.findViewById<ImageView>(R.id.bg)
 
                 tv_menucount = view.findViewById(R.id.tv_menucount)
                 tv_menuprice = view.findViewById(R.id.tv_menuprice)
                 val btnListener =
                     View.OnClickListener { view ->
-                        if (view == iv_icon) {
-                            Log.d("asd", "onItemClick: ")
-                        }
+
                         if (view == bg) {
                             goToCart()
                         }
                     }
-                iv_icon.setOnClickListener(btnListener)
                 bg.setOnClickListener(btnListener)
 
             }
@@ -558,12 +577,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .setCookiePosition(Gravity.BOTTOM)
             .show()
 
+        val relativeParams = Mainac?.layoutParams as FrameLayout.LayoutParams
+        relativeParams.setMargins(0, 0, 0, 70) // left, top, right, bottom
+        Mainac!!.setLayoutParams(relativeParams)
+
         tv_menucount?.text = "${listmenu!!.size} รายการ"
         tv_menuprice?.text = menu_price.toString()
         Log.d("tv_menucount", tv_menucount?.id.toString())
     }
 
-    private fun clearCart(){
+    private fun clearCart() {
         sharedPreferences?.edit()
             ?.putBoolean(
                 getString(R.string.CartStatus),
@@ -584,7 +607,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         CookieBar.dismiss(this@MainActivity);
     }
 
-    private fun goToCart(){
-     startActivity(Intent(this, CartActivity::class.java))
+    private fun goToCart() {
+        startActivity(Intent(this, CartActivity::class.java))
     }
 }

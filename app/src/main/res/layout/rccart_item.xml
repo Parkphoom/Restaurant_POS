@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_topline"
     android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
     android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/border_topline"
     android:padding="10dp">
 
     <TextView
@@ -17,36 +17,45 @@
         android:textSize="@dimen/txt_size_rvitem_name_M" />
 
     <TextView
-        android:layout_marginTop="10dp"
         android:id="@+id/tv_menuprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_menuname"
-        android:layout_marginStart="20dp" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:id="@+id/minus_btn"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/tv_menucount"
         android:background="@drawable/border_shadow"
-        android:text="-" />
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/minus" />
 
     <TextView
+        android:gravity="center"
+        android:layout_toStartOf="@+id/addmore_btn"
         android:id="@+id/tv_menucount"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_marginEnd="30dp" />
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:id="@+id/addmore_btn"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/tv_menucount"
-        android:background="@drawable/border_shadow"
         android:layout_alignParentEnd="true"
-        android:text="+" />
+        android:layout_centerVertical="true"
+        android:background="@drawable/border_shadow"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/plus" />
 
 </RelativeLayout>

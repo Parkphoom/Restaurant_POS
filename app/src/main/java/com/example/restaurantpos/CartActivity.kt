@@ -151,7 +151,7 @@ class CartActivity : AppCompatActivity(), View.OnClickListener {
                             Log.d(TAG, values.getInt(DatabaseHelper.MENU_PRICE).toString())
                         }
                     } catch (e: JSONException) {
-                        e.printStackTrace();
+                        e.printStackTrace()
                         Log.d(TAG, e.toString())
                     }
                 }

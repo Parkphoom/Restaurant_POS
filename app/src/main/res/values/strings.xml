@@ -30,4 +30,6 @@
     <string name="Pay">ชำระเงิน</string>
     <string name="thaibaht">฿</string>
     <string name="allmenu">รายการที่สั่ง</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
 </resources>

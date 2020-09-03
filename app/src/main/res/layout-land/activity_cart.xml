@@ -22,6 +22,7 @@
         android:textSize="@dimen/txt_size_rvitem_name_L" />
 
     <RelativeLayout
+        android:layout_above="@+id/bottom_layout"
         android:background="@color/white"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/tv_restname"
@@ -49,6 +50,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

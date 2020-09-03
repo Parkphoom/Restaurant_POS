@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="txt_size_rvitem_name_L">36sp</dimen>
-    <dimen name="txt_size_rvitem_name_M">28sp</dimen>
-    <dimen name="txt_size_rvitem_name_S">22sp</dimen>
+    <dimen name="txt_size_rvitem_name_L">32sp</dimen>
+    <dimen name="txt_size_rvitem_name_M">24sp</dimen>
+    <dimen name="txt_size_rvitem_name_S">18sp</dimen>
 </resources>
